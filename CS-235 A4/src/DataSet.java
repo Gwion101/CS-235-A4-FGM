@@ -16,6 +16,8 @@ public class DataSet {
 	private int m_lineDataCount;
 	private String[] m_attributes;
 	private double[][] m_data;
+	private String m_dataEntry;
+	private int m_emptyEntryCount;
 
 	public Boolean buildDataSet (File m_dataFile) {
 		if(!checkForValidFile(m_dataFile)){
@@ -38,7 +40,16 @@ public class DataSet {
 			m_lineScanner = new Scanner(m_fileScan.nextLine());
 			m_lineScanner.useDelimiter(m_delimiter);
 			for(int n=0; n<m_attributeCount; n++){
-				m_data[n][i]=Double.parseDouble(m_lineScanner.next());
+				if(!(m_lineScanner.hasNext())){
+					i--;
+					break;
+				}
+				m_dataEntry=m_lineScanner.next();
+				if(m_dataEntry.equals("")){
+					n--;
+				} else {
+					m_data[n][i]=Double.parseDouble(m_dataEntry); 
+				}	
 			}
 		}
 		System.out.println("Data Set Built");
@@ -81,21 +92,31 @@ public class DataSet {
 		m_entryCount=0;
 		m_attributeCount=countAttributes(m_dataFile);
 		m_delimiter=",";
-		m_fileScan.nextLine();
 		while(m_fileScan.hasNextLine()){
 			m_lineScanner = new Scanner(m_fileScan.nextLine());
 			m_lineScanner.useDelimiter(m_delimiter);
 			m_lineDataCount=0;
+			m_emptyEntryCount=0;
 			while(m_lineScanner.hasNext()){
-				try {  
-					Double.parseDouble(m_lineScanner.next());  
-				} catch(NumberFormatException nfe) {  
-					return false;  
+				m_dataEntry=m_lineScanner.next();
+				if(m_dataEntry.equals("")){
+					m_emptyEntryCount++;
+					m_lineDataCount--;
+				} else {
+					try {  
+						Double.parseDouble(m_dataEntry);  
+					} catch(NumberFormatException nfe) {  
+						return false; 
+					}
 				}
 				m_lineDataCount++;
 			}
-			if(!(m_lineDataCount==m_attributeCount)){
-				return false;
+			if(!(m_lineDataCount-m_emptyEntryCount==m_attributeCount)){
+				if (!(m_lineDataCount==0)){
+					return false;
+				} else {
+					m_entryCount--;
+				}
 			}
 			m_entryCount++;
 		}
