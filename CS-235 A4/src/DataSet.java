@@ -131,8 +131,7 @@ public class DataSet {
 			while(m_lineScanner.hasNext()){
 				m_dataEntry=m_lineScanner.next();
 				if(m_dataEntry.equals("")){
-					m_emptyEntryCount++;
-					m_lineDataCount--;
+					m_emptyEntryCount++;	
 				} else {
 					try {  
 						Double.parseDouble(m_dataEntry);  
@@ -141,9 +140,10 @@ public class DataSet {
 					}
 				}
 				m_lineDataCount++;
+				
 			}
 			if(!(m_lineDataCount-m_emptyEntryCount==m_attributeCount)){
-				if (!(m_lineDataCount==0)){
+				if (!(m_lineDataCount-m_emptyEntryCount==0)){
 					return false;
 				} else {
 					m_entryCount--;

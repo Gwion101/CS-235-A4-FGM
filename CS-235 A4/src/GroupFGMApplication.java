@@ -1,11 +1,8 @@
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
