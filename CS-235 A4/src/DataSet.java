@@ -18,7 +18,38 @@ public class DataSet {
 	private double[][] m_data;
 	private String m_dataEntry;
 	private int m_emptyEntryCount;
+	private double[] m_columnData;
 
+	public double[] getColumnData(int m_columnNo){
+		if(!(m_columnNo<=m_attributeCount)){
+			System.out.println("data entry error");
+		} else {
+			m_columnData = new double[m_entryCount];
+			for(int i = 0; i<m_entryCount; i++){
+				m_columnData[i] = m_data[m_columnNo][i];
+			}
+			return m_columnData;
+		}
+		return null;
+	}
+
+	public String getAttributeName(int m_columnNo){
+		if(!(m_columnNo<=m_attributeCount)){
+			System.out.println("column entry error");
+		} else {
+			return m_attributes[m_columnNo];
+		}
+		return null;
+	}
+
+	public int getNoOfEntrys(){
+		return m_entryCount;
+	}
+
+	public int getNoOfAttributes(){
+		return m_attributeCount;
+	}
+	
 	public Boolean buildDataSet (File m_dataFile) {
 		if(!checkForValidFile(m_dataFile)){
 			return false;
