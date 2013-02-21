@@ -62,7 +62,7 @@ public class DataSet {
 		} else {
 			m_columnData = new Object[m_entryCount];
 			for(int i = 0; i<m_entryCount; i++){
-				m_columnData[i] = m_data[m_columnNo][i];
+				m_columnData[i] = m_data[i][m_columnNo];
 			}
 			return m_columnData;
 		}
@@ -113,7 +113,7 @@ public class DataSet {
 		for(int i=0; i<m_attributeCount; i++){
 			m_attributes[i]=m_lineScanner.next();
 		}
-		m_data = new Object[m_attributeCount][m_entryCount];
+		m_data = new Object[m_entryCount][m_attributeCount];
 		for(int i=0; i<m_entryCount; i++){
 			m_lineScanner = new Scanner(m_fileScan.nextLine());
 			m_lineScanner.useDelimiter(m_delimiter);
@@ -126,7 +126,7 @@ public class DataSet {
 				if(m_dataEntry.equals("")){
 					n--;
 				} else {
-					m_data[n][i]=Double.parseDouble(m_dataEntry); 
+					m_data[i][n]=Double.parseDouble(m_dataEntry); 
 				}	
 			}
 		}
