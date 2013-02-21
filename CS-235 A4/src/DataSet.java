@@ -55,8 +55,9 @@ public class DataSet {
 	    * @return an array containing a column data values, the column of 
 	    * values returned is chosen by the given argument integer which must
 	    * be a value between 0 and the number of attributes in the data set.
+	    * @param m_columnNo the desired column
 	    */
-	public Object[] getColumnData(int m_columnNo){
+	public Object[] GetColumnData(int m_columnNo){
 		if(!(m_columnNo<m_attributeCount)){
 			System.out.println("data entry error");
 		} else {
@@ -72,8 +73,9 @@ public class DataSet {
 	    * @return a String of the 'nth' attribute of the attribute array 'nth'
 	    * term being the given argument integer which must be a value between
 	    * 0 and the number of attributes in the data set.
+	    * @param m_columnNo the desired column
 	    */
-	public String getAttributeName(int m_columnNo){
+	public String GetAttributeName(int m_columnNo){
 		if(!(m_columnNo<m_attributeCount)){
 			System.out.println("column entry error");
 		} else {
@@ -84,18 +86,19 @@ public class DataSet {
 	/**
 	    * @return the number of entries in the data set.
 	    */
-	public int getNoOfEntrys(){
+	public int GetNoOfEntrys(){
 		return m_entryCount;
 	}
 	/**
 	    * @return the number of attributes in the data set.
 	    */
-	public int getNoOfAttributes(){
+	public int GetNoOfAttributes(){
 		return m_attributeCount;
 	}
 	/**
 	    * @return TRUE on success if the csv file is valid and the data set
 	    * has been successfully built.
+	    * @param m_dataFile the imported csv file.
 	    */
 	public Boolean buildDataSet (File m_dataFile) {
 		if(!checkForValidFile(m_dataFile)){
@@ -135,6 +138,7 @@ public class DataSet {
 	}
 	/**
 	    * @return TRUE on success if all validation tests return true.
+	    * @param m_dataFile the imported csv file.
 	    */
 	private Boolean checkForValidFile(File m_dataFile){
 		final JPanel m_frame = new JPanel();
@@ -161,7 +165,10 @@ public class DataSet {
 		}
 		return true;
 	}
-	
+	/**
+	    * @return TRUE on success.
+	    * @param m_dataFile the imported csv file.
+	    */
 	private boolean checkForConsistentData(File m_dataFile) {
 		try {
 			m_fileScan = new Scanner(m_dataFile);
@@ -203,6 +210,7 @@ public class DataSet {
 	}
 	/**
 	    * @return TRUE on success.
+	    * @param m_dataFile the imported csv file.
 	    */
 	private int countAttributes(File m_dataFile) {
 		int m_numberOfAttributes = 0;
@@ -224,6 +232,7 @@ public class DataSet {
 	}
 	/**
 	    * @return TRUE on success.
+	    * @param m_dataFile the imported csv file.
 	    */
 	private boolean checkForAttributes(File m_dataFile) {
 		try {
@@ -246,6 +255,7 @@ public class DataSet {
 	}
 	/**
 	    * @return TRUE on success.
+	    * @param m_dataFile the imported csv file.
 	    */
 	private Boolean checkForCommas (File m_dataFile) {
 		m_delimiter="";
