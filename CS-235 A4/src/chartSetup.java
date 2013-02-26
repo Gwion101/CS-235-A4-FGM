@@ -88,6 +88,7 @@ public class chartSetup extends JFrame {
 				PlotOrientation.VERTICAL, false, false, false);
 		m_frame = new ChartPanel(m_chart);
 		m_container.add(m_frame);
+		m_container.revalidate();
 		m_container.repaint();
 	}
 }

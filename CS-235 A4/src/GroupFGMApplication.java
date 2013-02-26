@@ -47,8 +47,8 @@ public class GroupFGMApplication extends JFrame {
 		try {
 			chartSetup m_ChartSetup = new chartSetup(m_data);
 			m_ChartSetup.setSize(new Dimension(600,400));
+			m_ChartSetup.setExtendedState(MAXIMIZED_BOTH);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -76,5 +76,6 @@ public class GroupFGMApplication extends JFrame {
 		GroupFGMApplication m_mainWindow = new GroupFGMApplication();
 		m_mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m_mainWindow.setSize(100, 120);
+		m_mainWindow.setExtendedState(MAXIMIZED_BOTH);
 	}
 }
