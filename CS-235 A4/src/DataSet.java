@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 /**
  * \This class checks the received file to see if the file valid and then
  * stores the attribute data in one single dimensional array with the data
@@ -7,12 +12,6 @@
  * @file 	-DataSet.java
  * @data	-15 Feb '13
  */
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class DataSet {
 
