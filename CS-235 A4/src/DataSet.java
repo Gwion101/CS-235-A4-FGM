@@ -129,7 +129,11 @@ public class DataSet {
 				if(m_dataEntry.equals("")){
 					n--;
 				} else {
-					m_data[i][n]=Double.parseDouble(m_dataEntry); 
+					try{
+						m_data[i][n]=Integer.parseInt(m_dataEntry); 
+					} catch (NumberFormatException nfe){
+						m_data[i][n]=Float.parseFloat(m_dataEntry); 
+					}
 				}	
 			}
 		}

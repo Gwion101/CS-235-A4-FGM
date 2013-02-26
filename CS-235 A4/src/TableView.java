@@ -12,8 +12,8 @@ public class TableView extends JPanel {
         super(new GridLayout(1,0));
 
 		//Create and set up the window.
-        JFrame frame = new JFrame("TableView");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //JFrame frame = new JFrame("TableView");
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
         //final JTable table = new JTable(ds.GetData(), ds.GetAttributes());
 		final JTable table = new JTable(ds.GetData(), ds.GetAttributes()) {
@@ -34,11 +34,11 @@ public class TableView extends JPanel {
 		
 		//Create and set up the content pane.
         this.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(this);
+        //frame.setContentPane(this);
 
         //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        //frame.pack();
+        //frame.setVisible(true);
 
     }
 }

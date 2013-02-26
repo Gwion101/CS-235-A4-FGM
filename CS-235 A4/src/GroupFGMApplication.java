@@ -19,9 +19,12 @@ public class GroupFGMApplication extends JFrame {
 	Scanner m_fileScan;
 	private JButton m_pieChart_Button;
 	private DataSet m_data;
+	private JButton m_tableButton;
+	private TableView m_tableView;
+	private Container m_container;
 	
 	public GroupFGMApplication(){
-		Container m_container = getContentPane();
+		m_container = getContentPane();
         m_container.setLayout(new FlowLayout());
         m_openFile_Button = new JButton("Open");
         m_container.add(m_openFile_Button);
@@ -34,12 +37,17 @@ public class GroupFGMApplication extends JFrame {
 	}
 	
 	private class GUIEventHandler implements ActionListener {
+		
+
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource()==m_openFile_Button) {
 				openFile();
+				m_tableView = new TableView(m_data);
+				m_container.add(m_tableView);
+				m_container.revalidate();
 			} else if (event.getSource()==m_pieChart_Button){
 				setUpPieChart();
-			}
+			} 
 		}
 	}
 	
