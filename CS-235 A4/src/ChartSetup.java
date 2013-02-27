@@ -18,20 +18,22 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 
-public class chartSetup extends JFrame {
+public class ChartSetup extends JFrame {
 	
-	private JComboBox<?> m_attributeDropdown1;
+	private JComboBox m_attributeDropdown1;
 	private String[] m_modelString;
 	private JLabel m_label;
-	private JComboBox<?> m_attributeDropdown2;
+	private JComboBox m_attributeDropdown2;
 	private JTextField m_headerInput;
 	private JButton m_generateButton;
 	private DataSet m_dataSet;
 	private JFreeChart m_chart;
 	private ChartPanel m_frame;
 	private Container m_container;
+	private Integer m_nextValue1;
+	private Integer m_nextValue2;
 	
-	public chartSetup(DataSet m_data) throws IOException {
+	public ChartSetup(DataSet m_data) throws IOException {
 		m_dataSet = m_data;
 		m_container = getContentPane();
 		m_container.setLayout(new FlowLayout());
@@ -41,13 +43,13 @@ public class chartSetup extends JFrame {
 		for(int i=0; i<m_data.GetNoOfAttributes(); i++){
 			m_modelString[i] = m_data.GetAttributeName(i);
 		}
-		m_attributeDropdown1= new JComboBox<Object>(m_modelString);
+		m_attributeDropdown1= new JComboBox(m_modelString);
 		m_attributeDropdown1.setMaximumRowCount(m_data.GetNoOfAttributes());
 		m_container.add(m_attributeDropdown1);
 		
 		m_label = new JLabel("Select Second Attribute:");
 		m_container.add(m_label);
-		m_attributeDropdown2= new JComboBox<Object>(m_modelString);
+		m_attributeDropdown2= new JComboBox(m_modelString);
 		m_attributeDropdown2.setMaximumRowCount(m_data.GetNoOfAttributes());
 		m_container.add(m_attributeDropdown2);
 		
@@ -73,9 +75,10 @@ public class chartSetup extends JFrame {
 	
 	private void makeChart() {	
 		XYSeries m_dataSeries = new XYSeries("Histogram");
-		for (int i=0; i<m_dataSet.GetNoOfEntrys();i++){
-			
-			m_dataSeries.add((double) m_dataSet.GetColumnData(m_attributeDropdown1.getSelectedIndex())[i],(double) m_dataSet.GetColumnData(m_attributeDropdown2.getSelectedIndex())[i]);
+		for (int i=0; i<m_dataSet.GetNoOfEntrys();i++){	
+			m_nextValue1=(Integer) m_dataSet.GetColumnData(m_attributeDropdown1.getSelectedIndex())[i];
+			m_nextValue2 =(Integer) m_dataSet.GetColumnData(m_attributeDropdown2.getSelectedIndex())[i];
+			m_dataSeries.add((double) m_nextValue1.intValue(),(double) m_nextValue2.intValue());
 		}
 		XYSeriesCollection m_chartDataSet = new XYSeriesCollection();
 		m_chartDataSet.addSeries(m_dataSeries);

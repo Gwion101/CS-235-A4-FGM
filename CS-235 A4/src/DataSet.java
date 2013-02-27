@@ -130,9 +130,9 @@ public class DataSet {
 					n--;
 				} else {
 					try{
-						m_data[i][n]=Integer.parseInt(m_dataEntry); 
+						m_data[i][n]= Integer.parseInt(m_dataEntry);
 					} catch (NumberFormatException nfe){
-						m_data[i][n]=Float.parseFloat(m_dataEntry); 
+						m_data[i][n]= Float.parseFloat(m_dataEntry); 
 					}
 				}	
 			}
