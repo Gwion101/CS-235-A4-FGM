@@ -10,16 +10,24 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 
 public class BarChartBuilder {
-	private Integer m_nextValue1;
-	private Integer m_nextValue2;
+	private Double m_nextValue1;
+	private Double m_nextValue2;
 	private JFreeChart m_chart;
 	
 	public JFreeChart makeChart(DataSet m_dataSet,int m_A1,int m_A2,String m_header,String m_xTitle,String m_yTitle) {	
 		XYSeries m_dataSeries = new XYSeries("Histogram");
 		for (int i=0; i<m_dataSet.GetNoOfEntrys();i++){	
-			m_nextValue1=(Integer) m_dataSet.GetColumnData(m_A1)[i];
-			m_nextValue2 =(Integer) m_dataSet.GetColumnData(m_A2)[i];
-			m_dataSeries.add((double) m_nextValue1.intValue(),(double) m_nextValue2.intValue());
+			try{
+				m_nextValue1=(double) ((Integer) m_dataSet.GetColumnData(m_A1)[i]).intValue();
+			} catch (NumberFormatException nfe){
+				m_nextValue1=(double) ((Float) m_dataSet.GetColumnData(m_A1)[i]).floatValue();
+			}
+			try{
+				m_nextValue2 =(double) ((Integer) m_dataSet.GetColumnData(m_A2)[i]).intValue();
+			} catch (NumberFormatException nfe){
+				m_nextValue2=(double) ((Float) m_dataSet.GetColumnData(m_A2)[i]).floatValue();
+			}	
+			m_dataSeries.add( m_nextValue1, m_nextValue2);
 		}
 		XYSeriesCollection m_chartDataSet = new XYSeriesCollection();
 		m_chartDataSet.addSeries(m_dataSeries);

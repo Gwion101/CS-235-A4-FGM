@@ -35,7 +35,7 @@ import javax.swing.border.TitledBorder;
 
 public class DataVisualizerGUI extends JFrame {
 	private static final int FRAME_WIDTH = 600;
-	private static final int FRAME_HEIGHT = 800;
+	private static final int FRAME_HEIGHT = 600;
 	
 	private GUIEventHandler m_handler;
 	private final JFileChooser FILE_CHOOSER;
