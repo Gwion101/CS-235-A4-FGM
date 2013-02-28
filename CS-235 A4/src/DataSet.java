@@ -9,9 +9,9 @@ import javax.swing.JPanel;
  * values in a 2 dimensional array.
  * 
  * @author 	-Gwion Rhys Davies
- * @file 	-DataSet.java
- * @data	-15 Feb '13
- * @version -1.2.2
+ * \file 	-DataSet.java
+ * \data	-15 Feb '13
+ * \version -1.2.2
  */
 
 public class DataSet {
