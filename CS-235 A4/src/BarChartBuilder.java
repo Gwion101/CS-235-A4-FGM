@@ -25,9 +25,9 @@ public class BarChartBuilder {
 		m_chartDataSet.addSeries(m_dataSeries);
 		m_chart = ChartFactory.createXYBarChart( 
 				m_header,
-				m_xTitle,//x axis
+				m_xTitle,
 				false,
-				m_yTitle,//y axis
+				m_yTitle,
 				m_chartDataSet,
 				PlotOrientation.VERTICAL, false, false, false);
 		return m_chart;
