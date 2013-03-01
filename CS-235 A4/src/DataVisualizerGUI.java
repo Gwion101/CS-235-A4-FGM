@@ -2,7 +2,7 @@
  * @file: DataVisualizerGUI.java
  * @author: Rob
  * @date: 01.03.13
- * @version: 1.7
+ * @version: 1.8
  * 
  * This class creates all components of user interface
  * and handles user's actions
@@ -30,8 +30,17 @@ import javax.swing.JFrame;
 
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.general.PieDataset;
 
 public class DataVisualizerGUI extends JFrame {
+	public static ColourManager m_cm;
+	
 	private static final int FRAME_WIDTH = 600;
 	private static final int FRAME_HEIGHT = 600;
 	
@@ -78,8 +87,10 @@ public class DataVisualizerGUI extends JFrame {
         createControlPanel();
 		//createTabPanel();
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);	
+		m_cm = new ColourManager();
+		m_cm.setVisible(false);
 	}
-	
+		
 	/**
 	 * This is the event handler for the application
 	 * 
@@ -92,9 +103,7 @@ public class DataVisualizerGUI extends JFrame {
             		 || event.getSource() == m_openFile_Button) {
             	 try{
             		 if (openFile()) {
-            			 //these buttons and menu options are activated once the file is loaded
-            			 m_DrawChart_Button.setEnabled (true);
-            			 m_editMenuItem_DrawChart.setEnabled (true);
+            			 activateDrawAndExport();
             		 } else {
             		 	} //do not change anything when "Open File" action is cancelled
             	 } catch (NullPointerException e) {} //catches the exception in case no file is chosen
@@ -116,22 +125,16 @@ public class DataVisualizerGUI extends JFrame {
  					System.out.println("paint!");
  					m_chart.SetWindowVisible();
  					tabbedPanel.setSelectedIndex(1);
- 					
- 					//these buttons and options should only be active when the chart is drawn!!!
- 					m_fileMenuItem_Export.setEnabled (true); 
- 					m_exportVisualization_Button.setEnabled (true);
- 					m_editMenuItem_ChangeColourScheme.setEnabled (true);
-
  				} catch (NullPointerException e) {
  					System.out.println("Null"); e.printStackTrace();
  					}
              } else if (event.getSource() == m_editMenuItem_ChangeColourScheme) {
-            	//Colour Scheme pop-up window 
+            	m_cm.setVisible(true);
              } else if (event.getSource() == m_helpMenuItem_HelpContent) {
              	//Help Content pop-up window 
              } else if (event.getSource() == m_helpMenuItem_About) {
               	//About pop-up window 
-             }    
+             }
          }
     }
 
@@ -147,6 +150,26 @@ public class DataVisualizerGUI extends JFrame {
     	createHelpMenu();	
     	return m_bar;
     }    
+    
+    public void redrawChartColour() {
+    	JFreeChart chart;
+    	if (m_chart.getChart().equals(null)) {
+    		System.out.println("Error: No chart object found.");
+    	} else {
+    		chart = m_chart.getChart(); 
+    		if (m_chart.getChartType() == -1) {
+        		System.out.println("Error: No chart object found.");
+        	} else if (m_chart.getChartType() == 0) {
+        		XYPlot plot = chart.getXYPlot();
+                plot.setRenderer(DataVisualizerGUI.m_cm.getBarRenderer());
+        	} else if (m_chart.getChartType() == 1) {
+        		PiePlot plot = (PiePlot) chart.getPlot();
+                PieDataset dataset = plot.getDataset();
+                CustomPieRenderer renderer = new CustomPieRenderer(m_cm.getActiveMap());
+                renderer.setColor(plot, dataset);
+        	}
+    	}
+    }
     
     /**
      * Creates File Menu with all its options
@@ -280,28 +303,26 @@ public class DataVisualizerGUI extends JFrame {
      */
     private JTabbedPane createTabPanel(){
 
-		// Create a tabbed pane
+		// Create a tabbed panes
 		tabbedPanel = new JTabbedPane();
 		panel1 = new JPanel();
 		panel1.setLayout(new GridLayout(1,1));
 		tabbedPanel.addTab( "TableView", panel1);
-		//createPage1();
 		panel2 = new JPanel();
-		panel2.setLayout(new GridLayout(1,1));
-		
+		panel2.setLayout(new GridLayout(1,1));		
 		tabbedPanel.addTab( "Chart", panel2 );
 		add(tabbedPanel, BorderLayout.CENTER);
 		
 		return tabbedPanel;
     }
 
-    
   /**
    *   This method opens the file and instantiates an object of DataSet class
    */
-    
     private Boolean openFile(){
     	m_dataSetBackup = m_dataSet; //creates a data backup in case the file is corrupted
+    	FileFilter extensionFilter = new FileNameExtensionFilter("CSV Files (.csv)", "csv");
+    	FILE_CHOOSER.addChoosableFileFilter(extensionFilter);
     	int m_returnVal = FILE_CHOOSER.showOpenDialog(DataVisualizerGUI.this);
     	if (m_returnVal == JFileChooser.APPROVE_OPTION) {
     		File m_file = FILE_CHOOSER.getSelectedFile();
@@ -315,14 +336,13 @@ public class DataVisualizerGUI extends JFrame {
     	             JOptionPane.ERROR_MESSAGE);
     			m_dataSet = m_dataSetBackup; //retrieves the data from backup when the file was corrupted
 				return false;
-    		} else { 
+    		} else {
     			panel1.removeAll();
     			panel1.add( new TableView(m_dataSet) );
     			panel1.repaint();
     			panel1.revalidate();
     			tabbedPanel.setSelectedIndex(0);
-    			
-    			m_chart= new Chart(m_dataSet);
+    			m_chart = new Chart(m_dataSet);
     			panel2.removeAll();
     			panel2.add(m_chart);
     		}
@@ -330,7 +350,22 @@ public class DataVisualizerGUI extends JFrame {
     		System.out.println("Cancel");
     		return false;
     	}
-    	
     	return true;
-    }  
+    }
+   
+    /**
+     * This method activates Draw and Export buttons once the file is loaded
+     */ 
+	private void activateDrawAndExport() {
+		 //these buttons and menu options are activated once the file is loaded
+		 m_DrawChart_Button.setEnabled (true);
+		 m_exportVisualization_Button.setEnabled (true);
+		 m_editMenuItem_DrawChart.setEnabled (true);
+		 m_fileMenuItem_Export.setEnabled (true); 
+
+	}
+	
+	public void activateColour() {
+		m_editMenuItem_ChangeColourScheme.setEnabled (true);
+	}
 }
