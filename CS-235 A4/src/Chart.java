@@ -31,6 +31,7 @@ public class Chart extends JPanel {
 		super(new GridLayout(1,0));
 		m_dataSet = m_data;
 		m_createWindow = new JFrame("Chart Setup");
+		m_createWindow.setLocationRelativeTo(this);
 		m_createWindow.setSize(400, 400);
 		m_createWindow.setLayout(new FlowLayout());
 		m_label = new JLabel("Select First Attribute:");

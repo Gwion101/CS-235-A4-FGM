@@ -5,6 +5,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.general.SeriesException;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -27,7 +28,10 @@ public class BarChartBuilder {
 			} catch (NumberFormatException nfe){
 				m_nextValue2=(double) ((Float) m_dataSet.GetColumnData(m_A2)[i]).floatValue();
 			}	
-			m_dataSeries.add( m_nextValue1, m_nextValue2);
+			//if (m_dataSeries.
+			
+			m_dataSeries.update( m_nextValue1, m_nextValue2);
+			
 		}
 		XYSeriesCollection m_chartDataSet = new XYSeriesCollection();
 		m_chartDataSet.addSeries(m_dataSeries);

@@ -1,17 +1,15 @@
 /**
  * @file: DataVisualizerGUI.java
  * @author: Rob
- * @date: 27.02.13
- * @version: 1.0
- * 
+ * @date: 01.03.13
+ * @version: 1.7
  * 
  * This class creates all components of user interface
+ * and handles user's actions
  */
 
 import java.awt.*;
-//import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -47,6 +45,10 @@ public class DataVisualizerGUI extends JFrame {
 	JMenuItem m_fileMenuItem_Open;
 	JMenuItem m_fileMenuItem_Export;
 	JMenuItem m_fileMenuItem_Exit;
+	JMenuItem m_editMenuItem_DrawChart;
+	JMenuItem m_editMenuItem_ChangeColourScheme;
+	JMenuItem m_helpMenuItem_HelpContent;
+	JMenuItem m_helpMenuItem_About;
 
 	
 	private JButton m_openFile_Button;
@@ -58,7 +60,9 @@ public class DataVisualizerGUI extends JFrame {
     
 	private	JPanel panel1;
 	private	JPanel panel2;
-	private DataSet m_data;
+	private DataSet m_dataSet;
+	private DataSet m_dataSetBackup;
+	
 	private Chart m_chart;
 	
 	/**
@@ -87,16 +91,18 @@ public class DataVisualizerGUI extends JFrame {
              if (event.getSource() == m_fileMenuItem_Open
             		 || event.getSource() == m_openFile_Button) {
             	 try{
-            		 
-            		 openFile();
-            		 
-            		 //TableView table = new TableView(m_data); //for the purpose of testing, Table View window displays the data
+            		 if (openFile()) {
+            			 //these buttons and menu options are activated once the file is loaded
+            			 m_DrawChart_Button.setEnabled (true);
+            			 m_editMenuItem_DrawChart.setEnabled (true);
+            		 } else {
+            		 	} //do not change anything when "Open File" action is cancelled
             	 } catch (NullPointerException e) {} //catches the exception in case no file is chosen
              }
-             if (event.getSource() == m_fileMenuItem_Exit) {
+             else if (event.getSource() == m_fileMenuItem_Exit) {
             	 dispose();
              } 
-             if (event.getSource() == m_exportVisualization_Button){
+             else if (event.getSource() == m_exportVisualization_Button){
             	 BufferedImage bi = new BufferedImage(panel2.getSize().width, panel1.getSize().height, BufferedImage.TYPE_INT_ARGB); 
             	 Graphics g = bi.createGraphics();
             	 panel2.paint(g);  //this == JComponent
@@ -104,20 +110,28 @@ public class DataVisualizerGUI extends JFrame {
             	 System.out.println("printing");
             	 try{ImageIO.write(bi,"png",new File("test.png"));}catch (Exception e) {}
              }
-             if (event.getSource() ==  m_DrawChart_Button){
+             else if (event.getSource() ==  m_DrawChart_Button 
+            		 || event.getSource() ==  m_editMenuItem_DrawChart){
  				try {
  					System.out.println("paint!");
  					m_chart.SetWindowVisible();
- 					tabbedPanel.setSelectedIndex(1); 					
+ 					tabbedPanel.setSelectedIndex(1);
  					
- 					/*m_ChartSetup = new ChartSetup(m_data);
- 					m_ChartSetup.setSize(new Dimension(600,400));
- 					
- 				} catch (IOException e) {
- 					// TODO Auto-generated catch block
- 					//e.printStackTrace();*/
- 				} catch (NullPointerException e) {System.out.println("Null"); e.printStackTrace();}
-             }
+ 					//these buttons and options should only be active when the chart is drawn!!!
+ 					m_fileMenuItem_Export.setEnabled (true); 
+ 					m_exportVisualization_Button.setEnabled (true);
+ 					m_editMenuItem_ChangeColourScheme.setEnabled (true);
+
+ 				} catch (NullPointerException e) {
+ 					System.out.println("Null"); e.printStackTrace();
+ 					}
+             } else if (event.getSource() == m_editMenuItem_ChangeColourScheme) {
+            	//Colour Scheme pop-up window 
+             } else if (event.getSource() == m_helpMenuItem_HelpContent) {
+             	//Help Content pop-up window 
+             } else if (event.getSource() == m_helpMenuItem_About) {
+              	//About pop-up window 
+             }    
          }
     }
 
@@ -128,31 +142,21 @@ public class DataVisualizerGUI extends JFrame {
     private JMenuBar createMenuBar() {
     	
     	m_bar = new JMenuBar();
-    	
     	createFileMenu();
-        
-        //Build the Edit menu.
-        m_editMenu = new JMenu("Edit");
-        m_bar.add(m_editMenu);
-        
-        //Build the Help menu.
-        m_helpMenu = new JMenu("Help");
-        m_bar.add(m_helpMenu);
-    	
-        //a group of JMenuItems
-
+    	createEditMenu();
+    	createHelpMenu();	
     	return m_bar;
     }    
     
     /**
-     * Creates File menu and all its options
+     * Creates File Menu with all its options
      */
     private JMenu createFileMenu() {
         //Build the File menu.
         m_fileMenu = new JMenu("File");
         m_bar.add(m_fileMenu);
-        //add(m_fileMenu);
         
+        //create File Menu options
         m_fileMenuItem_Open = new JMenuItem("Open File...");
         m_fileMenuItem_Open.addActionListener(m_handler); //add item to the event listener
         m_fileMenuItem_Export = new JMenuItem("Export Visualization...");
@@ -160,6 +164,10 @@ public class DataVisualizerGUI extends JFrame {
         m_fileMenuItem_Exit = new JMenuItem("Exit");
         m_fileMenuItem_Exit.addActionListener(m_handler); //add item to the event listener
         
+        //these File Menu options are inactive before the valid data file is loaded
+        m_fileMenuItem_Export.setEnabled (false);
+ 
+        //options are added to File Menu
         m_fileMenu.add(m_fileMenuItem_Open);
         m_fileMenu.add(m_fileMenuItem_Export);
         m_fileMenu.addSeparator();
@@ -168,10 +176,55 @@ public class DataVisualizerGUI extends JFrame {
         return m_fileMenu;
     }
     
+    /**
+     * Creates Edit Menu with all its options
+     */
+    private JMenu createEditMenu() {
+        //Build the File menu.
+        m_editMenu = new JMenu("Edit");
+        m_bar.add(m_editMenu);
+        
+        //create Edit Menu options
+        m_editMenuItem_DrawChart = new JMenuItem("Draw Chart");
+        m_editMenuItem_DrawChart.addActionListener(m_handler); //add item to the event listener
+        m_editMenuItem_ChangeColourScheme = new JMenuItem("Change Colour Scheme");
+        m_editMenuItem_ChangeColourScheme.addActionListener(m_handler); //add item to the event listener
+        
+        //these File Menu options are inactive before the valid data file is loaded
+        m_editMenuItem_DrawChart.setEnabled (false);
+        m_editMenuItem_ChangeColourScheme.setEnabled (false);
+ 
+        //options are added to File Menu
+        m_editMenu.add(m_editMenuItem_DrawChart);
+        m_editMenu.add(m_editMenuItem_ChangeColourScheme);
+    	
+        return m_editMenu;
+    }
+    
+    /**
+     * Creates Help Menu with all its options
+     */
+    private JMenu createHelpMenu() {
+        //Build the File menu.
+        m_helpMenu = new JMenu("Help");
+        m_bar.add(m_helpMenu);
+        
+        //create Help Menu options
+        m_helpMenuItem_HelpContent = new JMenuItem("Help Content");
+        m_helpMenuItem_HelpContent.addActionListener(m_handler); //add item to the event listener
+        m_helpMenuItem_About = new JMenuItem("About");
+        m_helpMenuItem_About.addActionListener(m_handler); //add item to the event listener
+        
+        //options are added to File Menu
+        m_helpMenu.add(m_helpMenuItem_HelpContent);
+        m_helpMenu.add(m_helpMenuItem_About);
+    	
+        return m_helpMenu;
+    }
     
     /**
      * Creates Control Panel
-     * In case we need more button panels, those panels will be added here
+     * In case more button panels are needed, those panels will be added here
      * 
      */
     public void createControlPanel() {
@@ -187,7 +240,6 @@ public class DataVisualizerGUI extends JFrame {
     	// Add panel to content pane
     	add(controlPanel, BorderLayout.NORTH);
     	add(tabPanel);
-    	
     } 
     
     /**
@@ -210,16 +262,22 @@ public class DataVisualizerGUI extends JFrame {
         m_panel.setBorder(new TitledBorder(new EtchedBorder(), "Options"));
         m_panel.add(m_openFile_Button);
         m_panel.add(m_exportVisualization_Button);
-        //m_panel.add(Box.createHorizontalStrut(5));
         m_panel.add(new JSeparator(SwingConstants.VERTICAL));
-        //m_panel.add(new javax.swing.JPopupMenu.Separator());
-        //m_panel.add(Box.createHorizontalStrut(5));
+
         m_panel.add(m_DrawChart_Button);
+        
+        //these buttons are inactive before a valid data file is loaded
+        m_exportVisualization_Button.setEnabled (false);        
+        m_DrawChart_Button.setEnabled (false);
         
         return m_panel;
     }
     
-    
+    /**
+     * Creates Tab panel (for displaying Table and Chart)
+     * 
+     * @return
+     */
     private JTabbedPane createTabPanel(){
 
 		// Create a tabbed pane
@@ -236,53 +294,43 @@ public class DataVisualizerGUI extends JFrame {
 		
 		return tabbedPanel;
     }
-/*    
-    private void initTabComponent(int i) {
-        pane.setTabComponentAt(i, new ButtonTabComponent(pane));
-    }
-    
-    
-	public void createPage1()
-	{
-		panel1 = new JPanel();
-		//panel1.setLayout( null );
 
-		//panel1.add( new TableView(m_data) );
-
-
-	}
-*/
-    
-  
     
   /**
    *   This method opens the file and instantiates an object of DataSet class
    */
     
-    private void openFile(){
+    private Boolean openFile(){
+    	m_dataSetBackup = m_dataSet; //creates a data backup in case the file is corrupted
     	int m_returnVal = FILE_CHOOSER.showOpenDialog(DataVisualizerGUI.this);
     	if (m_returnVal == JFileChooser.APPROVE_OPTION) {
     		File m_file = FILE_CHOOSER.getSelectedFile();
     		System.out.println("Done");
-    		m_data = new DataSet(); 				//line changed
-    		if(!m_data.buildDataSet(m_file)){
+    		m_dataSet = new DataSet(); 				//line changed
+    		if(!m_dataSet.buildDataSet(m_file)){
     			final JPanel m_frame = new JPanel();
     			JOptionPane.showMessageDialog(m_frame,
     	             "The selected file is not compatible.",
     	             "File error",
     	             JOptionPane.ERROR_MESSAGE);
+    			m_dataSet = m_dataSetBackup; //retrieves the data from backup when the file was corrupted
+				return false;
     		} else { 
     			panel1.removeAll();
-    			panel1.add( new TableView(m_data) );
+    			panel1.add( new TableView(m_dataSet) );
     			panel1.repaint();
     			panel1.revalidate();
     			tabbedPanel.setSelectedIndex(0);
-    			m_chart= new Chart(m_data);
+    			
+    			m_chart= new Chart(m_dataSet);
     			panel2.removeAll();
-    			panel2.add( m_chart);
+    			panel2.add(m_chart);
     		}
     	} else {
     		System.out.println("Cancel");
+    		return false;
     	}
-    }
+    	
+    	return true;
+    }  
 }

@@ -38,6 +38,8 @@ public class DataSet {
 	private int m_emptyEntryCount;
 	/** */
 	private Object[] m_columnData;
+	/** */
+	private int m_numberOfAttributes;
 	
 	/**
 	    * @return the 2 dimensional array of data values.
@@ -217,7 +219,7 @@ public class DataSet {
 	    * @param m_dataFile the imported csv file.
 	    */
 	private int countAttributes(File m_dataFile) {
-		int m_numberOfAttributes = 0;
+		m_numberOfAttributes = 0;
 		m_delimiter=",";
 		try {
 			m_fileScan = new Scanner(m_dataFile);
