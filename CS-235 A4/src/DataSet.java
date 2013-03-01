@@ -4,61 +4,99 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 /**
- * \This class checks the received file to see if the file valid and then
- * stores the attribute data in one single dimensional array with the data
- * values in a 2 dimensional array.
+ * \file 	 DataSet.java
+ * \author 	 Gwion Rhys Davies
+ * \date	 15 Feb 2013
+ * \version  1.2.2
  * 
- * @author 	-Gwion Rhys Davies
- * \file 	-DataSet.java
- * \data	-15 Feb '13
- * \version -1.2.2
+ * \brief DataSet class to check whether a valid file has been imported.
+ * 
+ * The class will validate the received file and then store 
+ * the attribute data in one single dimensional array with the data
+ * values in a 2 dimensional array.
  */
 
 public class DataSet {
 
-	/** */
+	/**
+	 * A scanner that scans the entire imported file 
+	 */
 	private Scanner m_fileScan;
-	/** */
-	private String m_delimiter;
-	/** */
-	private Scanner m_lineScanner;
-	/** */
-	private int m_attributeCount;
-	/** */
-	private int m_entryCount;
-	/** */
-	private int m_lineDataCount;
-	/** */
-	private String[] m_attributes;
-	/** */
-	private Object[][] m_data;
-	/** */
-	private String m_dataEntry;
-	/** */
-	private int m_emptyEntryCount;
-	/** */
-	private Object[] m_columnData;
-	/** */
-	private int m_numberOfAttributes;
 	
 	/**
-	    * @return the 2 dimensional array of data values.
-	    */
+	 * Delimiter separates strings 
+	 */
+	private String m_delimiter;
+	
+	/**
+	 * A scanner that scans the lines in the .csv file 
+	 */
+	private Scanner m_lineScanner;
+	
+	/**
+	 * Number of attributes in the .csv file 
+	 */
+	private int m_attributeCount;
+	
+	/**
+	 * Number of entries of data in .csv file 
+	 */
+	private int m_entryCount;
+	
+	/**
+	 *  Counter that counts the number of pieces of data in a single line.  
+	 */
+	private int m_lineDataCount;
+	
+	/**
+	 * One dimensional string array containing all the data from the .csv file
+	 */
+	private String[] m_attributes;
+	
+	/**
+	 * Two dimensional object array containing all the data from the .csv file 
+	 */
+	private Object[][] m_data;
+	
+	/**
+	 * Saves all the data of the string temporarily and compares with null
+	 */
+	private String m_dataEntry;
+	
+	/** 
+	 * Counts the number of empty entries from a single line 
+	 */
+	private int m_emptyEntryCount;
+	
+	/** One dimensional object array containing the column data 
+	 * from the .csv file 
+	 */
+	private Object[] m_columnData;
+	
+	/** 
+	 * Counts the number of attributes from a single line 
+	 */
+	private int m_numberOfAttributes;
+	
+	
+	/**
+	 * @return the 2 dimensional array of data values.
+	 */
 	public Object [][] GetData() {
 		return m_data;
 	}
 	/**
-	    * @return the array of attribute values.
-	    */
+	 * @return the array of attribute values.
+	 */
 	public String[] GetAttributes() {
 		return m_attributes;
 	}
 	/**
-	    * @return an array containing a column data values, the column of 
-	    * values returned is chosen by the given argument integer which must
-	    * be a value between 0 and the number of attributes in the data set.
-	    * @param m_columnNo the desired column
-	    */
+	 * @return an array containing a column data values, the column of 
+	 * values returned is chosen by the given argument integer which must
+	 * be a value between 0 and the number of attributes in the data set.
+	 * @param m_columnNo the desired column
+	 */
 	public Object[] GetColumnData(int m_columnNo){
 		if(!(m_columnNo<m_attributeCount)){
 			System.out.println("data entry error");
@@ -72,11 +110,11 @@ public class DataSet {
 		return null;
 	}
 	/**
-	    * @return a String of the 'nth' attribute of the attribute array 'nth'
-	    * term being the given argument integer which must be a value between
-	    * 0 and the number of attributes in the data set.
-	    * @param m_columnNo the desired column
-	    */
+	 * @return a String of the 'nth' attribute of the attribute array 'nth'
+	 * term being the given argument integer which must be a value between
+	 * 0 and the number of attributes in the data set.
+	 * @param m_columnNo the desired column
+	 */
 	public String GetAttributeName(int m_columnNo){
 		if(!(m_columnNo<m_attributeCount)){
 			System.out.println("column entry error");
@@ -86,22 +124,22 @@ public class DataSet {
 		return null;
 	}
 	/**
-	    * @return the number of entries in the data set.
-	    */
+	 * @return the number of entries in the data set.
+	 */
 	public int GetNoOfEntrys(){
 		return m_entryCount;
 	}
 	/**
-	    * @return the number of attributes in the data set.
-	    */
+	 * @return the number of attributes in the data set.
+	 */
 	public int GetNoOfAttributes(){
 		return m_attributeCount;
 	}
 	/**
-	    * @return TRUE on success if the csv file is valid and the data set
-	    * has been successfully built.
-	    * @param m_dataFile the imported csv file.
-	    */
+	 * @return TRUE on success if the .csv file is valid and the data set
+	 * has been successfully built.
+	 * @param m_dataFile the imported .csv file.
+	 */
 	public Boolean buildDataSet (File m_dataFile) {
 		if(!checkForValidFile(m_dataFile)){
 			return false;
@@ -115,14 +153,16 @@ public class DataSet {
 		m_attributes = new String[m_attributeCount];
 		m_lineScanner = new Scanner(m_fileScan.nextLine());
 		m_lineScanner.useDelimiter(m_delimiter);
-		for(int i=0; i<m_attributeCount; i++){
+		m_attributes[0]="Record no";
+		for(int i=1; i<m_attributeCount; i++){
 			m_attributes[i]=m_lineScanner.next();
 		}
 		m_data = new Object[m_entryCount][m_attributeCount];
 		for(int i=0; i<m_entryCount; i++){
 			m_lineScanner = new Scanner(m_fileScan.nextLine());
 			m_lineScanner.useDelimiter(m_delimiter);
-			for(int n=0; n<m_attributeCount; n++){
+			m_data[i][0]=i;
+			for(int n=1; n<m_attributeCount; n++){
 				if(!(m_lineScanner.hasNext())){
 					i--;
 					break;
@@ -143,9 +183,9 @@ public class DataSet {
 		return true;
 	}
 	/**
-	    * @return TRUE on success if all validation tests return true.
-	    * @param m_dataFile the imported csv file.
-	    */
+	 * @return TRUE on success if all validation tests return true.
+	 * @param m_dataFile the imported .csv file.
+	 */
 	private Boolean checkForValidFile(File m_dataFile){
 		final JPanel m_frame = new JPanel();
 		if(!checkForCommas(m_dataFile)){
@@ -172,9 +212,9 @@ public class DataSet {
 		return true;
 	}
 	/**
-	    * @return TRUE on success.
-	    * @param m_dataFile the imported csv file.
-	    */
+	 * @return TRUE on success.
+	 * @param m_dataFile the imported .csv file.
+	 */
 	private boolean checkForConsistentData(File m_dataFile) {
 		try {
 			m_fileScan = new Scanner(m_dataFile);
@@ -203,7 +243,7 @@ public class DataSet {
 				}
 				m_lineDataCount++;	
 			}
-			if(!(m_lineDataCount-m_emptyEntryCount==m_attributeCount)){
+			if(!(m_lineDataCount+1-m_emptyEntryCount==m_attributeCount)){
 				if (!(m_lineDataCount-m_emptyEntryCount==0)){
 					return false;
 				} else {
@@ -215,11 +255,13 @@ public class DataSet {
 		return true;
 	}
 	/**
-	    * @return TRUE on success.
-	    * @param m_dataFile the imported csv file.
-	    */
+	 * @return TRUE on success.
+	 * @param m_dataFile the imported .csv file.
+	 */
 	private int countAttributes(File m_dataFile) {
-		m_numberOfAttributes = 0;
+		m_numberOfAttributes = 1;
+		//the record no is automatically the first entry 
+		//so this var starts at 1;
 		m_delimiter=",";
 		try {
 			m_fileScan = new Scanner(m_dataFile);
@@ -237,9 +279,9 @@ public class DataSet {
 		return m_numberOfAttributes;
 	}
 	/**
-	    * @return TRUE on success.
-	    * @param m_dataFile the imported csv file.
-	    */
+	 * @return TRUE on success.
+	 * @param m_dataFile the imported .csv file.
+	 */
 	private boolean checkForAttributes(File m_dataFile) {
 		try {
 			m_fileScan = new Scanner(m_dataFile);
@@ -260,9 +302,9 @@ public class DataSet {
 		return false; 
 	}
 	/**
-	    * @return TRUE on success.
-	    * @param m_dataFile the imported csv file.
-	    */
+	 * @return TRUE on success.
+	 * @param m_dataFile the imported .csv file.
+	 */
 	private Boolean checkForCommas (File m_dataFile) {
 		m_delimiter="";
 		try {
