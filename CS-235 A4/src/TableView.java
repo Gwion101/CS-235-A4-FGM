@@ -21,7 +21,7 @@ import java.awt.GridLayout;
 public class TableView extends JPanel {
 		
     public TableView(DataSet ds) {
-        super(new GridLayout(1,1));
+        super(new GridLayout(1,0));
 
         final JTable table = new JTable(ds.GetData(), ds.GetAttributes()) {
 			private static final long serialVersionUID = 1L;

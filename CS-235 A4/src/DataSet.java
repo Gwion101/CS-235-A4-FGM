@@ -161,7 +161,7 @@ public class DataSet {
 		for(int i=0; i<m_entryCount; i++){
 			m_lineScanner = new Scanner(m_fileScan.nextLine());
 			m_lineScanner.useDelimiter(m_delimiter);
-			m_data[i][0]=i;
+			m_data[i][0]=i+1;
 			for(int n=1; n<m_attributeCount; n++){
 				if(!(m_lineScanner.hasNext())){
 					i--;
