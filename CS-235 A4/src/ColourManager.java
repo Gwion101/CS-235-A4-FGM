@@ -4,33 +4,88 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
-import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
 import org.jfree.data.xy.XYDataset;
+
+/**
+ * \file 	 ColourManager.java
+ * \author 	 Matthew Adshead
+ * \date	 15 Feb 2013
+ * \version  2.5
+ * 
+ * \brief Object which manages colour schemes.
+ * 
+ * This class stores and manages a number of colour schemes,
+ * as well as providing an interface to change which colour scheme
+ * is used when rendering charts.
+ * It also stores custom renderer classes for each kind of chart,
+ * which allow the charts to be drawn using the colour maps
+ * in the ColourMap array.
+ */
 
 public class ColourManager extends JFrame {
 	
+	/**
+	 * Constant representing the total number of colour maps.
+	 */
 	private final int m_mapCount = 2;
 	
+	/**
+	 * Array of colour map objects.
+	 */
 	private ColourMap[] m_colourMaps = new ColourMap[m_mapCount];
+	
+	/**
+	 * Index of current active map.
+	 */
 	private int m_activeMap;
+	
+	/**
+	 * Custom renderer class for bar charts.
+	 */
 	private CustomBarRenderer m_barRenderer;
+	
+	/**
+	 * Custom renderer class for pie charts.
+	 */
 	private CustomPieRenderer m_pieRenderer;
+	
+	/**
+	 * UI Elements which needed to be accessed by the ActionListener class.
+	 * A combo box containing the names of the colour maps.
+	 */
 	private JComboBox m_mapList;
-	private JPanel m_previewPanel, m_previewContainer;
-	private Container m_container;
-	private JButton m_saveButton, m_closeButton;
-			
+	
+	/**
+	 * UI Elements which needed to be accessed by the ActionListener class.
+	 * Panel containing samples of the colours in the colour map.
+	 */
+	private JPanel m_previewPanel;
+	
+	/**
+	 * UI Elements which needed to be accessed by the ActionListener class.
+	 * Panel which holds the preview panel, for the purpose of redrawing it.
+	 */
+	private JPanel m_previewContainer;
+	
+	/**
+	 * UI Elements which needed to be accessed by the ActionListener class.
+	 * Save button, when clicked saves changes and closes GUI.
+	 */
+	private JButton m_saveButton;
+	
+	/**
+	 * UI Elements which needed to be accessed by the ActionListener class.
+	 * Close button, when clicked closes GUI.
+	 */
+	private JButton m_closeButton;
+	
+	/**
+	 * Initialises the colour manager.
+	 */
 	public ColourManager() {
 		initMaps();
 		initGUI();
@@ -38,9 +93,14 @@ public class ColourManager extends JFrame {
 		setTitle("Colour Options");
 	}
 	
+	/**
+	 * Inner class acting as an action listener for the GUI components.
+	 * @author Matt
+	 */
 	private class cmActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-            if (e.getSource()==m_mapList) {
+            //When combo box changed, redraw preview panel.
+			if (e.getSource()==m_mapList) {
             	m_previewContainer.removeAll();
             	m_previewPanel = drawSwatches(m_mapList.getSelectedIndex());
             	m_previewContainer.add(m_previewPanel);
@@ -56,11 +116,13 @@ public class ColourManager extends JFrame {
 		}
 	}
 	
+	/**
+	 * Initialises the GUI components.
+	 */
 	public void initGUI() {
 		cmActionListener listener = new cmActionListener();
 		
-		//m_container.
-		m_container = getContentPane();
+		Container m_container = getContentPane();
 		m_container.setLayout(new FlowLayout());
 		
 		JPanel optionsPanel = new JPanel(new GridLayout(4,2));
@@ -115,6 +177,11 @@ public class ColourManager extends JFrame {
 		setVisible(true);
 	}
 	
+	/**
+	 * Creates/redraws the preview panel.
+	 * \return JPanel containing preview of map colours.
+	 * \param mapIndex - The index of the map to use when drawing the panel.
+	 */
 	public JPanel drawSwatches(int mapIndex) {
 		JPanel swatchPanel = new JPanel();
 		Border swatchPanelBorder = BorderFactory.createTitledBorder("Preview");
@@ -124,38 +191,52 @@ public class ColourManager extends JFrame {
 		int borderWidth = 1;
 		Color borderColour = Color.black;
 		
-		Border swatchOutline = BorderFactory.createMatteBorder(borderWidth, borderWidth, borderWidth, borderWidth, borderColour);
+		Border swatchOutline = BorderFactory.createMatteBorder(
+			borderWidth,
+			borderWidth,
+			borderWidth,
+			borderWidth,
+			borderColour
+		);
+		
+		ColourMap map = getMap(mapIndex);
+		Color colour;
 		
 		for (int colourIndex=0; colourIndex<5; colourIndex++) {
 			switch (colourIndex) {
 			    case 0:	JPanel colour1 = new JPanel();
 						colour1.setSize(swatchSize);
 						colour1.setBorder(swatchOutline);
-						colour1.setBackground(getMap(mapIndex).getColour(colourIndex).getColour());
+						colour = map.getColour(colourIndex).getColour();
+						colour1.setBackground(colour);
 						swatchPanel.add(colour1);
 			    		break;
 			    case 1:	JPanel colour2 = new JPanel();
 						colour2.setSize(swatchSize);
 						colour2.setBorder(swatchOutline);
-						colour2.setBackground(getMap(mapIndex).getColour(colourIndex).getColour());
+						colour = map.getColour(colourIndex).getColour();
+						colour2.setBackground(colour);
 						swatchPanel.add(colour2);
 						break;
 			    case 2:	JPanel colour3 = new JPanel();
 						colour3.setSize(swatchSize);
 						colour3.setBorder(swatchOutline);
-						colour3.setBackground(getMap(mapIndex).getColour(colourIndex).getColour());
+						colour = map.getColour(colourIndex).getColour();
+						colour3.setBackground(colour);
 						swatchPanel.add(colour3);
 						break;
 			    case 3:	JPanel colour4 = new JPanel();
 						colour4.setSize(swatchSize);
 						colour4.setBorder(swatchOutline);
-						colour4.setBackground(getMap(mapIndex).getColour(colourIndex).getColour());
+						colour = map.getColour(colourIndex).getColour();
+						colour4.setBackground(colour);
 						swatchPanel.add(colour4);
 						break;
 			    case 4: JPanel colour5 = new JPanel();
 						colour5.setSize(swatchSize);
 						colour5.setBorder(swatchOutline);
-						colour5.setBackground(getMap(mapIndex).getColour(colourIndex).getColour());
+						colour = map.getColour(colourIndex).getColour();
+						colour5.setBackground(colour);
 						swatchPanel.add(colour5);
 						break;
 			}
@@ -163,6 +244,9 @@ public class ColourManager extends JFrame {
 		return(swatchPanel);
 	}
 	
+	/**
+	 * Initialises the colour maps.
+	 */
 	public void initMaps() {
 		Colour[] colours = new Colour[5];
 		for (int i=0; i<5; i++) {
@@ -207,58 +291,107 @@ public class ColourManager extends JFrame {
 		}
 		ColourMap nicecolours = new ColourMap(colours, "Nice Colours");
 		setMap(1, nicecolours);
-		setActiveMap(1);
+		setActiveMap(0);
 		setRenderers();
 	}
 	
-	public LegendItemCollection getLegend(JFreeChart chart, CustomBarRenderer renderer) {
+	/**
+	 * Takes a chart and creates a new legend for it based on renderer colours.
+	 * \return JFreeChart object LegendItemCollection, which is
+	 * used to draw colour legends on charts.
+	 * \param chart The JFreeChart object to construct legend for.
+	 * \param renderer The renderer for the chart.
+	 */
+	public LegendItemCollection getLegend(JFreeChart chart,
+	CustomBarRenderer renderer) {
 		XYPlot plot = chart.getXYPlot();
 		XYDataset dataset = plot.getDataset();
 		LegendItemCollection legend = new LegendItemCollection();    
 		for (int i = 0; i < chart.getXYPlot().getSeriesCount(); ++i) {
-		    LegendItem li = new LegendItem((String) dataset.getSeriesKey(i), renderer.getMap().getColour(i).getColour());
+		    LegendItem li = new LegendItem((String) dataset.getSeriesKey(i),
+		    		renderer.getMap().getColour(i).getColour());
 		    legend.add(li);
 		}
 		return(legend);
 	}
 	
+	/**
+	 * Saves the choice of active map and closes the UI window.
+	 */
 	public void saveAndClose() {
 		setActiveMap(m_mapList.getSelectedIndex());
 		DataVisualizer.dataVisualizer.redrawChartColour();
 		setVisible(false);
 	}
 	
+	/**
+	 * Closes UI window.
+	 */
 	public void closeFrame() {
 		setVisible(false);
 	}
 	
+	/**
+	 * Access method for the active colour map.
+	 * \return Colour map at the active map index in the array.
+	 */
 	public ColourMap getActiveMap() {
 		return(m_colourMaps[m_activeMap]);
 	}
 	
-	public void setActiveMap(int mapIndex) {
+	/**
+	 * Mutator method for active map.
+	 * \return Boolean representing operation success.
+	 * \param mapIndex - Index for new active map.
+	 */
+	public boolean setActiveMap(int mapIndex) {
 		m_activeMap = mapIndex;
 		setRenderers();
+		return(true);
 	}
-
+	
+	/**
+	 * Access method for maps in the array.
+	 * \return ColourMap at index in the array.
+	 * \param mapIndex - Index of the array.
+	 */
 	public ColourMap getMap(int mapIndex) {
 		return(m_colourMaps[mapIndex]);
 	}
 	
-	public void setMap(int mapIndex, ColourMap map) {
+	/**
+	 * Mutator method for maps in the array.
+	 * \param mapIndex - Index of the array.
+	 * \param map - New colour map.
+	 */
+	public boolean setMap(int mapIndex, ColourMap map) {
 		m_colourMaps[mapIndex] = map;
 		setRenderers();
+		return(true);
 	}
 	
-	public void setRenderers() {
+	/**
+	 * Initialises/re-initialises renderer objects using active map.
+	 * \return Boolean representing operation success.
+	 */
+	public boolean setRenderers() {
 		m_barRenderer = new CustomBarRenderer(getActiveMap());
 		m_pieRenderer = new CustomPieRenderer(getActiveMap());
+		return(true);
 	}
 	
+	/**
+	 * Access method for bar renderer.
+	 * \return Bar renderer object.
+	 */
 	public CustomBarRenderer getBarRenderer() {
 		return(m_barRenderer);
 	}
 	
+	/**
+	 * Access method for pie renderer.
+	 * \return Pie renderer object.
+	 */
 	public CustomPieRenderer getPieRenderer() {
 		return(m_pieRenderer);
 	}
