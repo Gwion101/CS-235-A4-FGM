@@ -190,21 +190,21 @@ public class DataSet {
 		final JPanel m_frame = new JPanel();
 		if(!checkForCommas(m_dataFile)){
 			JOptionPane.showMessageDialog(m_frame,
-        		    "(contains no commas)",
+        		    "File not compatible (contains no commas)",
         		    "File error",
         		    JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		if(!checkForAttributes(m_dataFile)){
 			JOptionPane.showMessageDialog(m_frame,
-        		    "(attribute error)",
+        		    "File not compatible (attribute error)",
         		    "File error",
         		    JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		if(!checkForConsistentData(m_dataFile)){
 			JOptionPane.showMessageDialog(m_frame,
-        		    "(data not consistent)",
+        		    "File not compatible (data not consistent)",
         		    "File error",
         		    JOptionPane.ERROR_MESSAGE);
 			return false;

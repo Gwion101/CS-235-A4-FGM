@@ -1,8 +1,8 @@
 /**
  * @file: TableView.java
  * @author: Rob
- * @date: 28.02.13
- * @version: 1.2
+ * @date: 02.03.13
+ * @version: 1.2.1
  * 
  * 
  * This class creates a table which is displayed in a tab in main GUI
@@ -21,7 +21,7 @@ import java.awt.GridLayout;
 public class TableView extends JPanel {
 		
     public TableView(DataSet ds) {
-        super(new GridLayout(1,0));
+        super(new GridLayout(1,1));
 
         final JTable table = new JTable(ds.GetData(), ds.GetAttributes()) {
 			private static final long serialVersionUID = 1L;
@@ -30,8 +30,10 @@ public class TableView extends JPanel {
 	        	  return false; //Disable cell editing
 	        	  }
 		};
-        table.setPreferredScrollableViewportSize(new Dimension(550, 600));
+        //table.setPreferredScrollableViewportSize(new Dimension(550, 600));
         table.setFillsViewportHeight(true);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
 
         //align all values to the center
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -40,7 +42,11 @@ public class TableView extends JPanel {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
            }
         
-        JScrollPane scrollPane = new JScrollPane(table);
+        //JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane;
+        scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        table.setAlignmentX(JTable.RIGHT_ALIGNMENT);
+       
         this.add(scrollPane);		
         this.setOpaque(true);
     }  

@@ -331,11 +331,6 @@ public class DataVisualizerGUI extends JFrame {
     		System.out.println("Done");
     		m_dataSet = new DataSet(); 				//line changed
     		if(!m_dataSet.buildDataSet(m_file)){
-    			final JPanel m_frame = new JPanel();
-    			JOptionPane.showMessageDialog(m_frame,
-    	             "The selected file is not compatible.",
-    	             "File error",
-    	             JOptionPane.ERROR_MESSAGE);
     			m_dataSet = m_dataSetBackup; //retrieves the data from backup when the file was corrupted
 				return false;
     		} else {

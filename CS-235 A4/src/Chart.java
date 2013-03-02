@@ -45,7 +45,7 @@ public class Chart extends JPanel {
     }
     
     public Chart (DataSet m_data) {
-        super(new GridLayout(1,0));
+        super(new GridLayout(1,1));
         m_dataSet = m_data;
         m_chartType = -1;
         m_chart = null;
