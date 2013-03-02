@@ -11,7 +11,7 @@ public class BarChartBuilder {
         Double nextValue1;
         Double nextValue2;
         
-        XYSeries dataSeries = new XYSeries("");
+        XYSeries dataSeries = new XYSeries(m_dataSet.GetAttributeName(m_A2));
         for (int i=0; i<m_dataSet.GetNoOfEntrys();i++) {	
             try {
                 nextValue1=(double) ((Integer) m_dataSet.GetColumnData(m_A1)[i]).intValue();
@@ -36,7 +36,7 @@ public class BarChartBuilder {
                         false,
                         m_yTitle,
                         chartDataSet,
-                        PlotOrientation.VERTICAL, false, false, false);
+                        PlotOrientation.VERTICAL, true, false, false);
         return chart;
     }
 }

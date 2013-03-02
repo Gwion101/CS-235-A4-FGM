@@ -98,7 +98,9 @@ public class Chart extends JPanel {
                 BarChartBuilder m_barChartBuilder=new BarChartBuilder();
                 JFreeChart chart = m_barChartBuilder.makeChart(m_dataSet,m_A1,m_A2,m_header,m_xTitle,m_yTitle);
                 XYPlot plot = chart.getXYPlot();
-                plot.setRenderer(DataVisualizerGUI.m_cm.getBarRenderer());
+                CustomBarRenderer renderer = DataVisualizerGUI.m_cm.getBarRenderer();
+                plot.setRenderer(renderer);
+                plot.setFixedLegendItems(DataVisualizerGUI.m_cm.getLegend(chart, renderer));
                 m_frame = new ChartPanel(chart);
                 setChartType(0);
                 setChart(chart);

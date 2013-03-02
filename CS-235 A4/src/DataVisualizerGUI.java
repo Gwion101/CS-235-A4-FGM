@@ -161,7 +161,9 @@ public class DataVisualizerGUI extends JFrame {
         		System.out.println("Error: No chart object found.");
         	} else if (m_chart.getChartType() == 0) {
         		XYPlot plot = chart.getXYPlot();
-                plot.setRenderer(DataVisualizerGUI.m_cm.getBarRenderer());
+        		CustomBarRenderer renderer = DataVisualizerGUI.m_cm.getBarRenderer();
+                plot.setRenderer(renderer);
+                plot.setFixedLegendItems(DataVisualizerGUI.m_cm.getLegend(chart, renderer));
         	} else if (m_chart.getChartType() == 1) {
         		PiePlot plot = (PiePlot) chart.getPlot();
                 PieDataset dataset = plot.getDataset();
