@@ -15,13 +15,13 @@ public class BarChartBuilder {
         for (int i=0; i<m_dataSet.GetNoOfEntrys();i++) {	
             try {
                 nextValue1=(double) ((Integer) m_dataSet.GetColumnData(m_A1)[i]).intValue();
-            } catch (NumberFormatException nfe){
+            } catch (ClassCastException cce){
                 nextValue1=(double) ((Float) m_dataSet.GetColumnData(m_A1)[i]).floatValue();
             }
             
             try {
                     nextValue2 =(double) ((Integer) m_dataSet.GetColumnData(m_A2)[i]).intValue();
-            } catch (NumberFormatException nfe){
+            } catch (ClassCastException cce){
                     nextValue2=(double) ((Float) m_dataSet.GetColumnData(m_A2)[i]).floatValue();
             }	
 						
