@@ -1,67 +1,74 @@
 import java.awt.Color;
-
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.PieDataset;
 
 /**
- * \file 	 CustomBarRenderer.java
- * \author 	 Matthew Adshead
- * \date	 15 Feb 2013
- * \version  1.1
+ * @file CustomPieRenderer.java
+ * @author Matthew Adshead
+ * @date 24.02.13
+ * @version 1.1
+ * @see http://www.jfree.org/jfreechart/api/javadoc/index.html and
+ *      http://docs.oracle.com/javase/6/docs/api/
  * 
- * \brief Custom pie chart renderer class.
+ *      \brief Custom pie chart renderer class.
  * 
- * This class is a custom renderer class which is used to
- * render pie chart objects using colours from the stored
- * colour map object.
+ *      This class is a custom renderer class which is used to render pie chart
+ *      objects using colours from the stored colour map object.
  */
 
 public class CustomPieRenderer {
-	
+
 	/**
-	 * ColourMap object used to define colours in the renderer.
+	 * Method for determining the colour for pie segments to be rendered with
+	 * and applying those colours to the chart object.
+	 * 
+	 * @param plot
+	 *            - PiePlot object from the pie chart.
+	 * @param dataset
+	 *            - PieDataset object from the pie chart.
 	 */
-	private ColourMap m_map;
-	
-	/**
-	 * Initialises the CustomPieRenderer.
-	 * \param The colour map for rendering the chart.
-	 */
-	public CustomPieRenderer(ColourMap map) {
-		setMap(map);
-    }
-	
+	public void SetColor(PiePlot plot, PieDataset dataset) {
+
+		int colours = m_map.GetNumber();
+		for (int i = 0; i < dataset.getItemCount(); i++) {
+			int colourIndex = i % colours;
+			Color colour = m_map.GetColour(colourIndex).GetColour();
+			plot.setSectionPaint(dataset.getKey(i), colour);
+		}
+	}
+
 	/**
 	 * Access method for the renderer colour map.
-	 * \return The renderer colour map.
+	 * 
+	 * @return The renderer colour map.
 	 */
-	public ColourMap getMap() {
-		return(m_map);
+	public ColourMap GetMap() {
+		return (m_map);
 	}
-	
+
 	/**
 	 * Mutator method for the renderer colour map.
-	 * \return Boolean representing operation success.
-	 * \param map - New colour map for renderer.
+	 * 
+	 * @param map
+	 *            - New colour map for renderer.
+	 * @return Boolean representing operation success.
 	 */
-	public boolean setMap(ColourMap map) {
+	public boolean SetMap(ColourMap map) {
 		m_map = map;
-		return(true);
-	} 
-    
+		return (true);
+	}
+
 	/**
-	 * Method for determining the colour for pie segments
-	 * to be rendered with and applying those colours
-	 * to the chart object.
-	 * \param plot - PiePlot object from the pie chart.
-	 * \param dataset - PieDataset object from the pie chart.
+	 * Initialises the CustomPieRenderer.
+	 * 
+	 * @param The
+	 *            colour map for rendering the chart.
 	 */
-    public void setColor(PiePlot plot, PieDataset dataset) {
-    	int colours = m_map.getNumber();
-    	for (int i = 0; i < dataset.getItemCount(); i++) { 
-    		int colourIndex = i % colours; 
-    		Color colour = m_map.getColour(colourIndex).getColour();
-            plot.setSectionPaint(dataset.getKey(i), colour);
-        } 
-    }
-}
+	public CustomPieRenderer(ColourMap map) {
+		SetMap(map);
+	}
+
+	/** ColourMap object used to define colours in the renderer. */
+	private ColourMap m_map;
+
+} /* end class CustomPieRenderer */
