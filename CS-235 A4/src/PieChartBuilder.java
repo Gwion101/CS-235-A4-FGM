@@ -17,9 +17,19 @@ public class PieChartBuilder {
         DefaultPieDataset  chartDataSet = new DefaultPieDataset();
 
         for (int i=0; i<m_dataSet.GetNoOfEntrys();i++) {	
+        	Double nextValue1;
+			try {
+                nextValue1=(double) ((Integer) m_dataSet.GetColumnData(m_A1)[i]).intValue();
+            } catch (ClassCastException cce){
+                nextValue1=(double) ((Float) m_dataSet.GetColumnData(m_A1)[i]).floatValue();
+            }
             
-            Integer nextValue1 =( Integer ) m_dataSet.GetColumnData( m_A1 )[i];
-            Integer nextValue2 =( Integer ) m_dataSet.GetColumnData( m_A2 )[i];
+            Double nextValue2;
+			try {
+                    nextValue2 =(double) ((Integer) m_dataSet.GetColumnData(m_A2)[i]).intValue();
+            } catch (ClassCastException cce){
+                    nextValue2=(double) ((Float) m_dataSet.GetColumnData(m_A2)[i]).floatValue();
+            }
             chartDataSet.setValue( nextValue1, nextValue2 );
         }
 
