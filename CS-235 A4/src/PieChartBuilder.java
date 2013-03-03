@@ -33,7 +33,7 @@ public class PieChartBuilder {
             chartDataSet.setValue( nextValue1, nextValue2 );
         }
 
-        JFreeChart chart = ChartFactory.createPieChart3D( 
+        JFreeChart chart = ChartFactory.createPieChart( 
                         m_header,
                         chartDataSet,
                         true, //include legend
