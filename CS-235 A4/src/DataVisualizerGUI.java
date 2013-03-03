@@ -1,96 +1,95 @@
 /**
- * @file: DataVisualizerGUI.java
- * @author: Rob
- * @date: 01.03.13
- * @version: 1.8
+ * @file    DataVisualizerGUI.java
+ * @author  Rob
+ * @date    01.03.13
+ * @see     http://docs.oracle.com/javase/tutorial/uiswing
  * 
- * This class creates all components of user interface
+ * \brief DataVisualizerGUI class creates all components of user interface
  * and handles user's actions
  */
 
 import java.awt.*;
-import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
+import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
-
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.general.PieDataset;
 
 public class DataVisualizerGUI extends JFrame {
-	public static ColourManager m_cm;
 	
-	private static final int FRAME_WIDTH = 600;
-	private static final int FRAME_HEIGHT = 600;
-	
-	private GUIEventHandler m_handler;
-	private final JFileChooser FILE_CHOOSER;
-	
-	JMenuBar m_bar;
-	private JMenu m_fileMenu;
-	private JMenu m_editMenu;
-	private JMenu m_helpMenu;
-	JMenuItem m_fileMenuItem_Open;
-	JMenuItem m_fileMenuItem_Export;
-	JMenuItem m_fileMenuItem_Exit;
-	JMenuItem m_editMenuItem_DrawChart;
-	JMenuItem m_editMenuItem_ChangeColourScheme;
-	JMenuItem m_helpMenuItem_HelpContent;
-	JMenuItem m_helpMenuItem_About;
-
-	
-	private JButton m_openFile_Button;
-	private JButton m_exportVisualization_Button;
-	private JButton m_DrawChart_Button;
-	
-    //private final JTabbedPane m_tabPanel  = new JTabbedPane();
-    private JTabbedPane tabbedPanel;
+    public static ColourManager m_cm;
+    private final int FRAME_WIDTH = 600;
+    private final int FRAME_HEIGHT = 600;
+	private final int MIN_FRAME_WIDTH = 400;
+	private final int MIN_FRAME_HEIGHT = 400;
+    private final JFileChooser FILE_CHOOSER;
+    private GUIEventHandler m_handler;
+    private JMenuBar m_bar;
+    private JMenu m_fileMenu;
+    private JMenu m_editMenu;
+    private JMenu m_helpMenu;
+    private JMenuItem m_fileMenuItem_Open;
+    private JMenuItem m_fileMenuItem_Export;
+    private JMenuItem m_fileMenuItem_Exit;
+    private JMenuItem m_editMenuItem_DrawChart;
+    private JMenuItem m_editMenuItem_ChangeColourScheme;
+    private JMenuItem m_helpMenuItem_HelpContent;
+    private JMenuItem m_helpMenuItem_About;
+    private JButton m_openFile_Button;
+    private JButton m_exportVisualization_Button;
+    private JButton m_DrawChart_Button;
+    private JButton m_ChangeColourScheme_Button;
+    private JTabbedPane m_tabbedPanel;
+    private JPanel m_panel1;
+    private JPanel m_panel2;
+    private DataSet m_dataSet;
+    private DataSet m_dataSetBackup;
+    private Chart m_chart;
     
-	private	JPanel panel1;
-	private	JPanel panel2;
-	private DataSet m_dataSet;
-	private DataSet m_dataSetBackup;
-	
-	private Chart m_chart;
-	
-	/**
-	 * Constructs UI frame
-	 */
-	public DataVisualizerGUI(){
+    /* flag checking if the manager is opening first time */
+    private Boolean m_firstTimeOpen = true;
+    
+     /** Constructs the UI frame */
+    public DataVisualizerGUI(){
 
-        //the handler
+        /* the handler */
         m_handler = new GUIEventHandler();
         FILE_CHOOSER = new JFileChooser();
 		
         setJMenuBar(createMenuBar());
         createControlPanel();
 		//createTabPanel();
-		setSize(FRAME_WIDTH, FRAME_HEIGHT);	
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setMinimumSize(new Dimension(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT));
 		m_cm = new ColourManager();
 		m_cm.setVisible(false);
 	}
 		
+    
+	public void disactivateColour() {
+		m_editMenuItem_ChangeColourScheme.setEnabled (false);
+                m_ChangeColourScheme_Button.setEnabled (false);
+	}
+    
 	/**
 	 * This is the event handler for the application
 	 * 
@@ -112,9 +111,9 @@ public class DataVisualizerGUI extends JFrame {
             	 dispose();
              } 
              else if (event.getSource() == m_exportVisualization_Button){
-            	 BufferedImage bi = new BufferedImage(panel2.getSize().width, panel1.getSize().height, BufferedImage.TYPE_INT_ARGB); 
+            	 BufferedImage bi = new BufferedImage(m_panel2.getSize().width, m_panel1.getSize().height, BufferedImage.TYPE_INT_ARGB); 
             	 Graphics g = bi.createGraphics();
-            	 panel2.paint(g);  //this == JComponent
+            	 m_panel2.paint(g);  //this == JComponent
             	 g.dispose();
             	 System.out.println("printing");
             	 try{ImageIO.write(bi,"png",new File("test.png"));}catch (Exception e) {}
@@ -124,11 +123,12 @@ public class DataVisualizerGUI extends JFrame {
  				try {
  					System.out.println("paint!");
  					m_chart.SetWindowVisible();
- 					tabbedPanel.setSelectedIndex(1);
+ 					m_tabbedPanel.setSelectedIndex(1);
  				} catch (NullPointerException e) {
  					System.out.println("Null"); e.printStackTrace();
  					}
-             } else if (event.getSource() == m_editMenuItem_ChangeColourScheme) {
+             } else if (event.getSource() == m_editMenuItem_ChangeColourScheme
+                     || event.getSource() == m_ChangeColourScheme_Button) {
             	m_cm.setVisible(true);
              } else if (event.getSource() == m_helpMenuItem_HelpContent) {
              	//Help Content pop-up window 
@@ -281,6 +281,9 @@ public class DataVisualizerGUI extends JFrame {
 
         m_DrawChart_Button = new JButton("Draw Chart");
         m_DrawChart_Button.addActionListener(m_handler);
+        
+        m_ChangeColourScheme_Button = new JButton("Change Colour Scheme");
+        m_ChangeColourScheme_Button.addActionListener(m_handler);
 
     	
         JPanel m_panel = new JPanel();       
@@ -290,10 +293,12 @@ public class DataVisualizerGUI extends JFrame {
         m_panel.add(new JSeparator(SwingConstants.VERTICAL));
 
         m_panel.add(m_DrawChart_Button);
+        m_panel.add(m_ChangeColourScheme_Button);
         
         //these buttons are inactive before a valid data file is loaded
         m_exportVisualization_Button.setEnabled (false);        
         m_DrawChart_Button.setEnabled (false);
+        m_ChangeColourScheme_Button.setEnabled (false);
         
         return m_panel;
     }
@@ -306,42 +311,52 @@ public class DataVisualizerGUI extends JFrame {
     private JTabbedPane createTabPanel(){
 
 		// Create a tabbed panes
-		tabbedPanel = new JTabbedPane();
-		panel1 = new JPanel();
-		panel1.setLayout(new GridLayout(1,1));
-		tabbedPanel.addTab( "TableView", panel1);
-		panel2 = new JPanel();
-		panel2.setLayout(new GridLayout(1,1));		
-		tabbedPanel.addTab( "Chart", panel2 );
-		add(tabbedPanel, BorderLayout.CENTER);
+		m_tabbedPanel = new JTabbedPane();
+		m_panel1 = new JPanel();
+		m_panel1.setLayout(new GridLayout(1,1));
+		m_tabbedPanel.addTab( "TableView", m_panel1);
+		m_panel2 = new JPanel();
+		m_panel2.setLayout(new GridLayout(1,1));		
+		m_tabbedPanel.addTab( "Chart", m_panel2 );
+		add(m_tabbedPanel, BorderLayout.CENTER);
 		
-		return tabbedPanel;
+		return m_tabbedPanel;
     }
 
   /**
    *   This method opens the file and instantiates an object of DataSet class
    */
     private Boolean openFile(){
-    	m_dataSetBackup = m_dataSet; //creates a data backup in case the file is corrupted
-    	FileFilter extensionFilter = new FileNameExtensionFilter("CSV Files (.csv)", "csv");
-    	FILE_CHOOSER.addChoosableFileFilter(extensionFilter);
+    	/* creates a data backup in case the file is corrupted */
+    	m_dataSetBackup = m_dataSet;
+    	
+    	/* add .csv extension option to File Chooser */
+    	if(m_firstTimeOpen) {
+    		m_firstTimeOpen = false;
+    		FileFilter extensionFilter = new FileNameExtensionFilter("CSV Files (.csv)", "csv");
+    		FILE_CHOOSER.addChoosableFileFilter(extensionFilter);
+    	}
+    	
     	int m_returnVal = FILE_CHOOSER.showOpenDialog(DataVisualizerGUI.this);
     	if (m_returnVal == JFileChooser.APPROVE_OPTION) {
     		File m_file = FILE_CHOOSER.getSelectedFile();
     		System.out.println("Done");
-    		m_dataSet = new DataSet(); 				//line changed
+    		m_dataSet = new DataSet();
     		if(!m_dataSet.buildDataSet(m_file)){
     			m_dataSet = m_dataSetBackup; //retrieves the data from backup when the file was corrupted
 				return false;
     		} else {
-    			panel1.removeAll();
-    			panel1.add( new TableView(m_dataSet) );
-    			panel1.repaint();
-    			panel1.revalidate();
-    			tabbedPanel.setSelectedIndex(0);
+    			
+    			/* set buttons to default */
+    			disactivateColour();
+    			m_panel1.removeAll();
+    			m_panel1.add( new TableView(m_dataSet) );
+    			m_panel1.repaint();
+    			m_panel1.revalidate();
+    			m_tabbedPanel.setSelectedIndex(0);
     			m_chart = new Chart(m_dataSet);
-    			panel2.removeAll();
-    			panel2.add(m_chart);
+    			m_panel2.removeAll();
+    			m_panel2.add(m_chart);
     		}
     	} else {
     		System.out.println("Cancel");
@@ -364,5 +379,7 @@ public class DataVisualizerGUI extends JFrame {
 	
 	public void activateColour() {
 		m_editMenuItem_ChangeColourScheme.setEnabled (true);
+                m_ChangeColourScheme_Button.setEnabled (true);
 	}
+	
 }

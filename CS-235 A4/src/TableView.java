@@ -14,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -21,7 +23,7 @@ import java.awt.GridLayout;
 public class TableView extends JPanel {
 		
     public TableView(DataSet ds) {
-        super(new GridLayout(1,1));
+        super(new GridLayout(1,0));
 
         final JTable table = new JTable(ds.GetData(), ds.GetAttributes()) {
 			private static final long serialVersionUID = 1L;
@@ -30,7 +32,7 @@ public class TableView extends JPanel {
 	        	  return false; //Disable cell editing
 	        	  }
 		};
-        //table.setPreferredScrollableViewportSize(new Dimension(550, 600));
+
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
@@ -40,12 +42,10 @@ public class TableView extends JPanel {
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
         for(int i=0 ; i < ds.GetNoOfAttributes(); i++){
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-           }
+           }    
         
-        //JScrollPane scrollPane = new JScrollPane(table);
-        JScrollPane scrollPane;
-        scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        table.setAlignmentX(JTable.RIGHT_ALIGNMENT);
+        JScrollPane scrollPane = new JScrollPane(table, JScrollPane
+        		.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
        
         this.add(scrollPane);		
         this.setOpaque(true);

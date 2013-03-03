@@ -83,6 +83,9 @@ public class ColourManager extends JFrame {
 	 */
 	private JButton m_closeButton;
 	
+	/* flag checking if the manager is opening first time */
+	private Boolean m_cmFirstTimeOpen = true;
+	
 	/**
 	 * Initialises the colour manager.
 	 */
@@ -174,7 +177,13 @@ public class ColourManager extends JFrame {
 		
 		pack();
 		setLocationRelativeTo(null);
-		setVisible(true);
+		
+		if (m_cmFirstTimeOpen) { 
+			setVisible(false);
+			m_cmFirstTimeOpen = false;
+		} else {
+			setVisible(true);
+		}
 	}
 	
 	/**
