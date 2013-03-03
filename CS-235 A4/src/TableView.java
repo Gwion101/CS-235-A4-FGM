@@ -36,13 +36,13 @@ public class TableView extends JPanel {
 		};
 
 		table.setFillsViewportHeight(true);
-		/*
+		/**
 		 * Allows an arbitary amount of columns to be displayed without them
 		 * being resized to an unreadable size
 		 */
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		/* align all values in the table to the center */
+		/** align all values in the table to the center */
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
@@ -50,7 +50,7 @@ public class TableView extends JPanel {
 			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
 
-		/* Adds scroll panes to the window */
+		/** Adds scroll panes to the window */
 		JScrollPane scrollPane = new JScrollPane(table,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -58,4 +58,4 @@ public class TableView extends JPanel {
 		this.add(scrollPane);
 		this.setOpaque(true);
 	}
-} /* end TableView class */
+} /** end TableView class */

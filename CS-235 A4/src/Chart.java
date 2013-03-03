@@ -237,4 +237,4 @@ public class Chart extends JPanel {
 	final private int WIDTH = 650;
 	final private int HEIGHT = 230;
 
-} /* end Chart class */
+} /** end Chart class */

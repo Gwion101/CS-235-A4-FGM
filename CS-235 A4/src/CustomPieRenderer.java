@@ -71,4 +71,4 @@ public class CustomPieRenderer {
 	/** ColourMap object used to define colours in the renderer. */
 	private ColourMap m_map;
 
-} /* end class CustomPieRenderer */
+} /** end class CustomPieRenderer */

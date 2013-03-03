@@ -23,5 +23,5 @@ public class GroupFGMApplication {
 		dataVisualizer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		dataVisualizer.setTitle("Data Visualizer");
 		dataVisualizer.setVisible(true);
-	} /* end main */
-} /* end Class GroupFGMApplication */
+	} /** end main */
+} /** end Class GroupFGMApplication */

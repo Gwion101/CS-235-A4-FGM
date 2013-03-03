@@ -442,4 +442,4 @@ public class ColourManager extends JFrame {
 	/** flag checking if the manager is opening first time */
 	private Boolean m_cmFirstTimeOpen = true;
 
-} /* end class ColourManager */
+} /** end class ColourManager */

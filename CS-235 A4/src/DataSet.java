@@ -342,4 +342,4 @@ public class DataSet {
 	/** Counts the number of attributes from a single line */
 	private int m_numberOfAttributes;
 
-} /* end class DataSet */
+} /** end class DataSet */

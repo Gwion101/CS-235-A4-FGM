@@ -443,4 +443,4 @@ public final class DataVisualizerGUI extends JFrame {
 	private DataSet m_dataSetBackup;
 	private Chart m_chart;
 
-} /* end class DataVisualizerGUI */
+} /** end class DataVisualizerGUI */

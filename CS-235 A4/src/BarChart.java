@@ -61,4 +61,4 @@ public class BarChart {
 				false, false);
 		return chart;
 	}
-} /* end BarChart class */
+} /** end BarChart class */

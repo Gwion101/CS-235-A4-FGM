@@ -56,4 +56,4 @@ public class PieChart {
 				true, false);
 		return chart;
 	}
-} /* end PieChart class */
+} /** end PieChart class */

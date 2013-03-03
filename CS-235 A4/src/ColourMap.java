@@ -131,4 +131,4 @@ public class ColourMap {
 	/** String representing the colour map name. */
 	private String m_mapName;
 
-} /* end class ColourMap */
+} /** end class ColourMap */

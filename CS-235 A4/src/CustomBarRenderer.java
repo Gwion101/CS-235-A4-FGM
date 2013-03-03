@@ -69,4 +69,4 @@ public class CustomBarRenderer extends ClusteredXYBarRenderer {
 	/** ColourMap object used to define colours in the renderer. */
 	private ColourMap m_map;
 
-} /* end class CustomBarRenderer */
+} /** end class CustomBarRenderer */

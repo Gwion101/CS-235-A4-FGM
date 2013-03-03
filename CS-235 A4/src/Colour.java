@@ -136,4 +136,4 @@ public class Colour {
 	/** The Color object, which will be used in the recolouring of charts. */
 	private Color m_colour;
 
-} /* end class Colour */
+} /** end class Colour */
