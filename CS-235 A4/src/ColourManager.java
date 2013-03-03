@@ -108,12 +108,13 @@ public class ColourManager extends JFrame {
             	m_previewPanel = drawSwatches(m_mapList.getSelectedIndex());
             	m_previewContainer.add(m_previewPanel);
             	m_previewPanel.repaint();
-            	m_previewPanel.revalidate();
+            	m_previewPanel.revalidate();	
             }
             if (e.getSource()==m_closeButton) {
             	closeFrame();
             }
             if (e.getSource()==m_saveButton) {
+            	DataVisualizer.dataVisualizer.selectChartTab(); //line added
             	saveAndClose();
             }
 		}
@@ -385,6 +386,7 @@ public class ColourManager extends JFrame {
 	 */
 	public boolean setRenderers() {
 		m_barRenderer = new CustomBarRenderer(getActiveMap());
+
 		m_pieRenderer = new CustomPieRenderer(getActiveMap());
 		return(true);
 	}

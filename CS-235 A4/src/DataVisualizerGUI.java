@@ -6,6 +6,7 @@
  * 
  * \brief DataVisualizerGUI class creates all components of user interface
  * and handles user's actions
+ * 
  */
 
 import java.awt.*;
@@ -20,7 +21,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -55,10 +55,12 @@ public class DataVisualizerGUI extends JFrame {
     private JMenuItem m_helpMenuItem_HelpContent;
     private JMenuItem m_helpMenuItem_About;
     private JButton m_openFile_Button;
-    private JButton m_exportVisualization_Button;
+    private JButton m_exportVisualization_Button;  
     private JButton m_DrawChart_Button;
     private JButton m_ChangeColourScheme_Button;
     private JTabbedPane m_tabbedPanel;
+    private final int TABLE_PANEL = 0;
+    private final int CHART_PANEL = 1;
     private JPanel m_panel1;
     private JPanel m_panel2;
     private DataSet m_dataSet;
@@ -83,13 +85,21 @@ public class DataVisualizerGUI extends JFrame {
 		m_cm = new ColourManager();
 		m_cm.setVisible(false);
 	}
-		
+	
+    public void selectChartTab() {
+    	m_tabbedPanel.setSelectedIndex(CHART_PANEL);	
+    }
+    
+	public void activateColour() {
+		m_editMenuItem_ChangeColourScheme.setEnabled (true);
+        m_ChangeColourScheme_Button.setEnabled (true);
+	}
     
 	public void disactivateColour() {
 		m_editMenuItem_ChangeColourScheme.setEnabled (false);
-                m_ChangeColourScheme_Button.setEnabled (false);
+        m_ChangeColourScheme_Button.setEnabled (false);
 	}
-    
+	 
 	/**
 	 * This is the event handler for the application
 	 * 
@@ -123,7 +133,7 @@ public class DataVisualizerGUI extends JFrame {
  				try {
  					System.out.println("paint!");
  					m_chart.SetWindowVisible();
- 					m_tabbedPanel.setSelectedIndex(1);
+ 					//m_tabbedPanel.setSelectedIndex(CHART_PANEL);
  				} catch (NullPointerException e) {
  					System.out.println("Null"); e.printStackTrace();
  					}
@@ -140,7 +150,7 @@ public class DataVisualizerGUI extends JFrame {
 
     /**
      * Creates Menu Bar
-     * @return
+     * @return Menu bar with its components
      */  
     private JMenuBar createMenuBar() {
     	
@@ -353,7 +363,7 @@ public class DataVisualizerGUI extends JFrame {
     			m_panel1.add( new TableView(m_dataSet) );
     			m_panel1.repaint();
     			m_panel1.revalidate();
-    			m_tabbedPanel.setSelectedIndex(0);
+    			m_tabbedPanel.setSelectedIndex(TABLE_PANEL);
     			m_chart = new Chart(m_dataSet);
     			m_panel2.removeAll();
     			m_panel2.add(m_chart);
@@ -376,10 +386,5 @@ public class DataVisualizerGUI extends JFrame {
 		 m_fileMenuItem_Export.setEnabled (true); 
 
 	}
-	
-	public void activateColour() {
-		m_editMenuItem_ChangeColourScheme.setEnabled (true);
-                m_ChangeColourScheme_Button.setEnabled (true);
-	}
-	
+
 }

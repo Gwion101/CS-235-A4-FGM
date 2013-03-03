@@ -1,6 +1,6 @@
 /**
  * @file: TableView.java
- * @author: Rob
+ * @author: Robert Rokosz
  * @date: 02.03.13
  * @version: 1.2.1
  * 
@@ -13,10 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 
@@ -35,9 +31,8 @@ public class TableView extends JPanel {
 
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
 
-        //align all values to the center
+        //align all values in the table to the center
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
         for(int i=0 ; i < ds.GetNoOfAttributes(); i++){
