@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 /**
  * \file 	 DataSet.java
  * \author 	 Gwion Rhys Davies
- * \date	 15 Feb 2013
- * \version  1.2.2
+ * \date	 28 Feb 2013
+ * \version  1.4.9
  * 
  * \brief DataSet class to check whether a valid file has been imported.
  * 
