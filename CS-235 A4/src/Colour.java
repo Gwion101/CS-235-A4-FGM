@@ -37,7 +37,7 @@ public class Colour {
 	 * Access method for Hex String. \return String representing the colour's
 	 * Hex code.
 	 */
-	public String SetHex() {
+	public String GetHex() {
 		return (m_hexCode);
 	}
 
